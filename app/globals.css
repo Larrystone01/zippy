@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  @apply bg-[#f7f5ef] text-[#17130f] antialiased;
+  background-image:
+    radial-gradient(circle at top left, rgba(178, 132, 58, 0.12), transparent 34rem),
+    radial-gradient(circle at bottom right, rgba(178, 132, 58, 0.06), transparent 28rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(247, 245, 239, 1) 22rem);
+}
+
+::selection {
+  @apply bg-[#b2843a] text-white;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgba(23, 19, 15, 0.08);
+  box-shadow: 0 24px 70px rgba(23, 19, 15, 0.12);
+}
+
+@layer components {
+  .lux-shell {
+    @apply mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8;
+  }
+
+  .lux-card {
+    @apply rounded-2xl border border-[#e7dece] bg-white/85 shadow-[0_22px_60px_rgba(23,19,15,0.08)] backdrop-blur transition duration-300 hover:border-[#dfd2bd] hover:shadow-[0_28px_70px_rgba(23,19,15,0.12)];
+  }
+
+  .lux-card-flat {
+    @apply rounded-2xl border border-[#e7dece] bg-white/90 shadow-[0_12px_36px_rgba(23,19,15,0.05)];
+  }
+
+  .lux-panel {
+    @apply rounded-2xl border border-[#dfd2bd] bg-[#17130f] text-white shadow-[0_28px_70px_rgba(23,19,15,0.22)];
+  }
+
+  .lux-input {
+    @apply w-full rounded-xl border border-[#ded3c2] bg-white/90 px-4 py-3 text-sm text-[#17130f] outline-none transition placeholder:text-[#9a8e7d] focus:border-[#b2843a] focus:ring-4 focus:ring-[#b2843a]/15 disabled:bg-[#f1ede5] disabled:text-[#9a8e7d];
+  }
+
+  .lux-label {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-[#7b6d5b];
+  }
+
+  .lux-button {
+    @apply rounded-xl bg-[#17130f] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(23,19,15,0.18)] transition hover:bg-[#2a2118] disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .lux-button-gold {
+    @apply rounded-xl bg-[#b2843a] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(178,132,58,0.25)] transition hover:bg-[#987033] disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .lux-button-soft {
+    @apply rounded-xl border border-[#ded3c2] bg-white/80 px-5 py-3 text-sm font-semibold text-[#2a2118] transition hover:border-[#b2843a] hover:bg-[#fffaf0] disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .lux-stat {
+    @apply relative overflow-hidden rounded-2xl border border-[#e7dece] bg-white/85 p-5 shadow-[0_16px_40px_rgba(23,19,15,0.06)] backdrop-blur transition duration-300 hover:border-[#dfd2bd] hover:shadow-[0_22px_50px_rgba(23,19,15,0.1)];
+  }
+
+  .lux-stat::before {
+    content: "";
+    @apply absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-[#f4c76b] to-[#b2843a];
+  }
+
+  .lux-badge {
+    @apply rounded-full px-3 py-1 text-xs font-semibold;
+  }
+
+  .lux-muted {
+    @apply text-[#776c5f];
+  }
+
+  .lux-table {
+    @apply w-full min-w-[700px] overflow-hidden rounded-2xl border border-[#e7dece] bg-white/85 text-sm shadow-[0_18px_50px_rgba(23,19,15,0.08)];
+  }
+
+  .lux-profile-header {
+    @apply flex flex-col items-start justify-between gap-4 rounded-2xl border border-[#e7dece] bg-gradient-to-br from-white/95 to-[#fbf8f1]/90 p-6 shadow-[0_20px_55px_rgba(23,19,15,0.08)] backdrop-blur md:flex-row md:items-center;
+  }
+
+  .lux-avatar {
+    @apply grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-[#fff4dd] to-[#f4c76b]/40 text-lg font-bold text-[#987033] ring-2 ring-[#e7dece] ring-offset-2;
+  }
+
+  .lux-tabs {
+    @apply flex gap-1 rounded-xl border border-[#e7dece] bg-white/60 p-1 backdrop-blur;
+  }
+
+  .lux-tab {
+    @apply rounded-lg px-4 py-2 text-sm font-medium text-[#776c5f] transition hover:text-[#2a2118];
+  }
+
+  .lux-tab-active {
+    @apply rounded-lg bg-white px-4 py-2 text-sm font-semibold text-[#987033] shadow-[0_4px_16px_rgba(23,19,15,0.06)];
+  }
+
+  .lux-tab-bar {
+    @apply flex gap-2 border-b border-[#e7dece];
+  }
+
+  .lux-tab-bar-item {
+    @apply relative px-4 py-2.5 text-sm font-medium capitalize text-[#776c5f] transition hover:text-[#2a2118];
+  }
+
+  .lux-tab-bar-item-active {
+    @apply relative px-4 py-2.5 text-sm font-semibold capitalize text-[#987033];
+  }
+
+  .lux-tab-bar-item-active::after {
+    content: "";
+    @apply absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-gradient-to-r from-[#f4c76b] to-[#b2843a];
+  }
+
+  .lux-order-card {
+    @apply flex flex-col gap-3 rounded-2xl border border-[#e7dece] bg-white/90 p-5 shadow-[0_12px_36px_rgba(23,19,15,0.05)] transition duration-300 hover:border-[#dfd2bd] hover:shadow-[0_20px_50px_rgba(23,19,15,0.1)] md:flex-row md:items-center md:justify-between;
+  }
+
+  .lux-order-card-link {
+    @apply lux-order-card cursor-pointer;
+  }
+
+  .lux-empty {
+    @apply rounded-2xl border border-dashed border-[#ded3c2] bg-white/50 p-10 text-center text-[#776c5f];
+  }
+
+  .lux-section-band {
+    @apply border-y border-[#e7dece] bg-white/55 py-16;
+  }
+
+  .lux-page-title {
+    @apply text-2xl font-semibold tracking-tight text-[#17130f];
+  }
+
+  .lux-section-title {
+    @apply text-lg font-semibold text-[#17130f];
+  }
+
+  .lux-divider {
+    @apply h-px bg-gradient-to-r from-transparent via-[#e7dece] to-transparent;
+  }
+
+  .lux-glow {
+    @apply pointer-events-none absolute -inset-px rounded-[inherit] opacity-0 transition duration-500;
+    background: radial-gradient(600px circle at var(--x, 50%) var(--y, 50%), rgba(178, 132, 58, 0.08), transparent 40%);
+  }
+
+  .lux-feature-icon {
+    @apply grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-[#fff4dd] to-[#f4c76b]/30 text-lg shadow-[0_8px_20px_rgba(178,132,58,0.15)];
+  }
+
+  .lux-trust-pill {
+    @apply rounded-xl border border-[#e7dece] bg-white/70 px-4 py-3 text-center text-sm font-semibold text-[#2a2118] shadow-[0_8px_24px_rgba(23,19,15,0.04)] backdrop-blur transition hover:border-[#dfd2bd] hover:bg-white/90;
+  }
+
+  .lux-online-toggle-on {
+    @apply rounded-full bg-gradient-to-r from-emerald-600 to-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(16,185,129,0.3)] transition hover:from-emerald-700 hover:to-emerald-600;
+  }
+
+  .lux-online-toggle-off {
+    @apply rounded-full border border-[#ded3c2] bg-white/80 px-5 py-2.5 text-sm font-semibold text-[#776c5f] transition hover:border-[#b2843a] hover:bg-[#fffaf0];
+  }
+}
