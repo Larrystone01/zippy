@@ -26,8 +26,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const params = useSearchParams();
-  const explicitNext = params.get("next");
+  // const params = useSearchParams();
+  // const explicitNext = params.get("next");
   const login = async (email: string, password: string) => {
     try {
       setIsLoading(true);
@@ -61,19 +61,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const loginWithGoogle = async (provider: "google") => {
-    await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        // Only forward an explicit next — if there isn't one, the callback
-        // route resolves the role-based destination itself after exchanging
-        // the OAuth code (it doesn't have a userId to work with until then).
-        redirectTo: explicitNext
-          ? `${window.location.origin}/auth/callback?next=${encodeURIComponent(explicitNext)}`
-          : `${window.location.origin}/auth/callback`,
-      },
-    });
-  };
+  // const loginWithGoogle = async (provider: "google") => {
+  //   await supabase.auth.signInWithOAuth({
+  //     provider,
+  //     options: {
+  //       // Only forward an explicit next — if there isn't one, the callback
+  //       // route resolves the role-based destination itself after exchanging
+  //       // the OAuth code (it doesn't have a userId to work with until then).
+  //       redirectTo: explicitNext
+  //         ? `${window.location.origin}/auth/callback?next=${encodeURIComponent(explicitNext)}`
+  //         : `${window.location.origin}/auth/callback`,
+  //     },
+  //   });
+  // };
 
   const saveUser = (user: User) => {
     setUser(user);

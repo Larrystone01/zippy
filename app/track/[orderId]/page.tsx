@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { LatLng } from "@/components/Map";
 import Button from "@/components/Button";
@@ -45,11 +46,8 @@ const STATUS_LABEL: Record<string, string> = {
   cancelled: "Cancelled",
 };
 
-export default function TrackOrderPage({
-  params,
-}: {
-  params: { orderId: string };
-}) {
+export default function TrackOrderPage() {
+  const { orderId } = useParams<{ orderId: string }>();
   const supabase = createClient();
   const [order, setOrder] = useState<Order | null>(null);
   const [rider, setRider] = useState<{
@@ -67,14 +65,14 @@ export default function TrackOrderPage({
       const { data: orderData } = await supabase
         .from("orders")
         .select("*")
-        .eq("id", params.orderId)
+        .eq("id", orderId)
         .single();
       setOrder(orderData);
 
       const { data: eventData } = await supabase
         .from("order_events")
         .select("*")
-        .eq("order_id", params.orderId)
+        .eq("order_id", orderId)
         .order("created_at", { ascending: true });
       setEvents(eventData ?? []);
 
@@ -93,14 +91,14 @@ export default function TrackOrderPage({
 
     // Realtime: order status/location changes
     const orderChannel = supabase
-      .channel(`order-${params.orderId}`)
+      .channel(`order-${orderId}`)
       .on(
         "postgres_changes",
         {
           event: "UPDATE",
           schema: "public",
           table: "orders",
-          filter: `id=eq.${params.orderId}`,
+          filter: `id=eq.${orderId}`,
         },
         (payload) => setOrder(payload.new as Order),
       )
@@ -110,7 +108,7 @@ export default function TrackOrderPage({
           event: "INSERT",
           schema: "public",
           table: "order_events",
-          filter: `order_id=eq.${params.orderId}`,
+          filter: `order_id=eq.${orderId}`,
         },
         (payload) => setEvents((prev) => [...prev, payload.new as OrderEvent]),
       )
@@ -121,7 +119,7 @@ export default function TrackOrderPage({
       if (riderChannel) supabase.removeChannel(riderChannel);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.orderId]);
+  }, [orderId]);
 
   // Subscribe to rider's live location once we know who the rider is
   useEffect(() => {
