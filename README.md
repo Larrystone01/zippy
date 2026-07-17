@@ -35,17 +35,7 @@ http://localhost:3000/auth/callback
 https://your-production-domain.com/auth/callback
 ```
 
-## 3. Environment variables
-
-Copy `.env.local.example` to `.env.local` and fill in:
-
-```
-NEXT_PUBLIC_SUPABASE_URL=...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-```
-
-## 4. Install & run
+## 3. Install & run
 
 ```bash
 npm install
@@ -54,12 +44,12 @@ npm run dev
 
 Visit `http://localhost:3000`.
 
-## 5. Make yourself an admin
+## 4. Make yourself an admin
 
 Sign up normally, then in Supabase's **Table Editor → profiles**, find your row and change
 `role` from `customer` to `admin`. Visit `/dashboard/admin`.
 
-## 6. Make yourself a rider
+## 5. Make yourself a rider
 
 Either check "Sign up as a rider" on the signup form, or edit your `profiles.role` to `rider`
 in the Table Editor, then visit `/dashboard/rider`. Your browser will ask for location
