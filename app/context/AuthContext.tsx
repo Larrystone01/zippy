@@ -14,7 +14,7 @@ type AuthContextType = {
   user: User | null;
   saveUser: (user: User) => void;
   login: (email: string, password: string) => Promise<User>;
-  loginWithGoogle: (provider: "google") => Promise<void>;
+  // loginWithGoogle: (provider: "google") => Promise<void>;
   logout: () => void;
   isLoading: boolean;
   error: string | null;
@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         user,
         saveUser,
         login,
-        loginWithGoogle,
+        // loginWithGoogle,
         logout,
         isLoading,
         error,
