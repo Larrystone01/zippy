@@ -29,6 +29,7 @@ In Supabase: **Authentication → Providers**
   `https://<your-project-ref>.supabase.co/auth/v1/callback` as an authorized redirect URI in Google Cloud.
 
 Also add your app's own callback under **Authentication → URL Configuration → Redirect URLs**:
+
 ```
 http://localhost:3000/auth/callback
 https://your-production-domain.com/auth/callback
@@ -63,6 +64,8 @@ Sign up normally, then in Supabase's **Table Editor → profiles**, find your ro
 Either check "Sign up as a rider" on the signup form, or edit your `profiles.role` to `rider`
 in the Table Editor, then visit `/dashboard/rider`. Your browser will ask for location
 permission — allow it so the app can broadcast your GPS position for live tracking.
+
+**Note:** These steps are intended for local development and testing only. In a production application, roles should be assigned securely through an admin workflow or backend service.
 
 ## Notes on the map
 

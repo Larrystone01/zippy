@@ -1,6 +1,7 @@
 "use client";
 import { createClient } from "@/lib/supabase/client";
 import { useContext, createContext, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export type User = {
   id: string;
@@ -25,6 +26,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const params = useSearchParams();
+  const explicitNext = params.get("next");
   const login = async (email: string, password: string) => {
     try {
       setIsLoading(true);

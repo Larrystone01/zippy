@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const FormInput = ({ isPassword }) => {
+const FormInput = ({ isPassword }: { isPassword: boolean }) => {
   return (
     <StyledWrapper>
       <div className="form-container">
