@@ -8,9 +8,11 @@ export async function middleware(request: NextRequest) {
 
   const isCheckout = pathname.startsWith("/checkout");
   const isDashboard = pathname.startsWith("/dashboard");
-  const isProtected = isCheckout || isDashboard;
+  const isProtected = isDashboard;
+  const isAuthPage = pathname === "/signin" || pathname === "/signup";
+  const shouldCheckAuth = isProtected || isAuthPage;
 
-  if (!isProtected) {
+  if (!shouldCheckAuth) {
     return response;
   }
 
@@ -58,6 +60,28 @@ export async function middleware(request: NextRequest) {
     }
 
     return NextResponse.redirect(redirectUrl);
+  }
+
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (!profile || error) {
+    return NextResponse.redirect(new URL("/signin", request.url));
+  }
+  const role = profile.role;
+  if (isAuthPage) {
+    if (role === "admin") {
+      return NextResponse.redirect(new URL("/dashboard/admin", request.url));
+    }
+
+    if (role === "driver") {
+      return NextResponse.redirect(new URL("/dashboard/driver", request.url));
+    }
+
+    return NextResponse.redirect(new URL("/dashboard/user", request.url));
   }
 
   return response;

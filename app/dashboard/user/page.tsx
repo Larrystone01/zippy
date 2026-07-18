@@ -81,6 +81,26 @@ export default function UserDashboard() {
         .single();
       setProfile(profileData);
 
+      const { data: guestOrders } = await supabase
+        .from("orders")
+        .select("id")
+        .eq("customer_email", user.email)
+        .is("customer_id", null);
+
+      if (guestOrders?.length) {
+        const { error } = await supabase
+          .from("orders")
+          .update({
+            customer_id: user.id,
+          })
+          .eq("customer_email", user.email)
+          .is("customer_id", null);
+
+        if (error) {
+          console.error("Failed to claim guest orders:", error);
+        }
+      }
+
       const { data } = await supabase
         .from("orders")
         .select(
@@ -152,9 +172,7 @@ export default function UserDashboard() {
       {/* Profile header */}
       <div className="lux-profile-header">
         <div className="flex items-center gap-4">
-          <div className="lux-avatar">
-            {initials}
-          </div>
+          <div className="lux-avatar">{initials}</div>
           <div>
             <p className="lux-label">Your account</p>
             <h1 className="text-xl font-semibold text-[#17130f]">
@@ -166,10 +184,7 @@ export default function UserDashboard() {
             )}
           </div>
         </div>
-        <Link
-          href="/checkout"
-          className="lux-button-gold !px-5 !py-2.5"
-        >
+        <Link href="/checkout" className="lux-button-gold !px-5 !py-2.5">
           + New delivery
         </Link>
       </div>
@@ -184,8 +199,12 @@ export default function UserDashboard() {
         ].map(([label, value]) => (
           <div key={label as string} className="lux-stat pl-6">
             <p className="text-lg opacity-60">{STAT_ICONS[label as string]}</p>
-            <p className="mt-2 text-xs font-medium uppercase tracking-wide text-[#9a8e7d]">{label}</p>
-            <p className="mt-1 text-2xl font-semibold text-[#17130f]">{value}</p>
+            <p className="mt-2 text-xs font-medium uppercase tracking-wide text-[#9a8e7d]">
+              {label}
+            </p>
+            <p className="mt-1 text-2xl font-semibold text-[#17130f]">
+              {value}
+            </p>
           </div>
         ))}
       </div>
@@ -254,9 +273,7 @@ export default function UserDashboard() {
                 )}
               </div>
               <div className="flex items-center justify-between gap-4 md:flex-col md:items-end md:justify-center">
-                <span
-                  className={`lux-badge ${STATUS_COLOR[o.status]}`}
-                >
+                <span className={`lux-badge ${STATUS_COLOR[o.status]}`}>
                   {STATUS_LABEL[o.status] ?? o.status}
                 </span>
                 <p className="text-lg font-semibold text-[#987033]">
