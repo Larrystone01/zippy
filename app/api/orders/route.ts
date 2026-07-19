@@ -15,6 +15,9 @@ export async function POST(request: Request) {
     note,
     recipientName,
     recipientPhone,
+    customerName,
+    customerEmail,
+    customerPhone,
     distanceKm,
     price,
   } = body;
@@ -39,6 +42,9 @@ export async function POST(request: Request) {
     package_note: note,
     recipient_name: recipientName,
     recipient_phone: recipientPhone,
+    customer_name: customerName,
+    customer_email: customerEmail,
+    customer_phone: customerPhone,
     distance_km: Number(distanceKm.toFixed(2)),
     price: Number(price.toFixed(2)),
   });

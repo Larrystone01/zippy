@@ -1,7 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { claimGuestOrders } from "@/lib/order/claimGuestOrders";
 
 export async function GET(request: Request) {
+  console.log("OAuth callback reached");
   const { searchParams, origin } = new URL(request.url);
   // Gets code to convert into session tokens
   const code = searchParams.get("code");
@@ -38,6 +40,8 @@ export async function GET(request: Request) {
     .eq("id", user.id)
     .maybeSingle();
 
+  console.log("User ID:", user.id);
+  console.log("Profile:", profile);
   // First-time Google login
   if (!profile) {
     const { error: insertError } = await supabase.from("profiles").insert({
@@ -54,11 +58,21 @@ export async function GET(request: Request) {
       );
     }
 
-    return NextResponse.redirect(`${origin}/dashboard/customer`);
+    // return NextResponse.redirect(`${origin}/dashboard/customer`);
+  }
+
+  if (user.email) {
+    try {
+      console.log("About to claim guest orders");
+      await claimGuestOrders(user.email, user.id);
+      console.log("Finished claiming guest orders");
+    } catch (error) {
+      console.error("Failed to claim guest orders:", error);
+    }
   }
 
   // Existing user
-  switch (profile.role) {
+  switch (profile?.role) {
     case "admin":
       return NextResponse.redirect(`${origin}/dashboard/admin`);
 

@@ -247,7 +247,7 @@ export default function CheckoutForm({ user }: ChecKOutFormProps) {
       return;
     }
 
-    router.push(`/track/${result.id}`);
+    router.push(`/order-success?order=${result.id}`);
   };
 
   return (

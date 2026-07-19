@@ -120,6 +120,12 @@ function SignUpForm() {
       });
 
       await completeSignupAs(data.user.id);
+      switch (role) {
+        case "rider":
+          router.push("/dashboard/rider");
+        default:
+          router.push("/dashboard/user");
+      }
       // setStep("verify");
     } catch (err) {
       setError(
@@ -249,7 +255,9 @@ function SignUpForm() {
               onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
               className="lux-input text-center text-lg tracking-[0.4em]"
             />
-            {verifyError && <p className="text-sm text-red-600">{verifyError}</p>}
+            {verifyError && (
+              <p className="text-sm text-red-600">{verifyError}</p>
+            )}
             {resendMessage && (
               <p className="text-sm text-emerald-700">{resendMessage}</p>
             )}
@@ -280,7 +288,9 @@ function SignUpForm() {
           ← Back
         </button>
 
-        <p className="lux-label">{role === "rider" ? "Rider application" : "Customer account"}</p>
+        <p className="lux-label">
+          {role === "rider" ? "Rider application" : "Customer account"}
+        </p>
         <h1 className="mt-3 text-3xl font-semibold text-[#17130f]">
           {role === "rider" ? "Apply to ride" : "Create your account"}
         </h1>
@@ -290,96 +300,91 @@ function SignUpForm() {
             : "Send packages in minutes."}
         </p>
 
-      <form onSubmit={signUp} className="mt-6 flex flex-col gap-3">
-        <input
-          required
-          placeholder="Full name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          className="lux-input"
-        />
-        <input
-          type="email"
-          required
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="lux-input"
-        />
-        <input
-          type="password"
-          required
-          minLength={6}
-          placeholder="Password (min. 6 characters)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="lux-input"
-        />
+        <form onSubmit={signUp} className="mt-6 flex flex-col gap-3">
+          <input
+            required
+            placeholder="Full name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            className="lux-input"
+          />
+          <input
+            type="email"
+            required
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="lux-input"
+          />
+          <input
+            type="password"
+            required
+            minLength={6}
+            placeholder="Password (min. 6 characters)"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="lux-input"
+          />
 
-        {role === "rider" && (
-          <>
-            <input
-              required
-              placeholder="Phone number"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="lux-input"
-            />
-            <div>
-              <label className="lux-label">
-                Vehicle type
-              </label>
-              <select
-                value={vehicleType}
-                onChange={(e) => setVehicleType(e.target.value)}
-                className="lux-input mt-2"
+          {role === "rider" && (
+            <>
+              <input
+                required
+                placeholder="Phone number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="lux-input"
+              />
+              <div>
+                <label className="lux-label">Vehicle type</label>
+                <select
+                  value={vehicleType}
+                  onChange={(e) => setVehicleType(e.target.value)}
+                  className="lux-input mt-2"
+                >
+                  {VEHICLE_TYPES.map((v) => (
+                    <option key={v} value={v}>
+                      {v}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </>
+          )}
+
+          {alreadyRegistered && (
+            <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              An account with this email already exists.{" "}
+              <Link
+                href={`/auth/signin?next=${encodeURIComponent(
+                  role === "rider"
+                    ? "/dashboard/rider/profile"
+                    : "/dashboard/user",
+                )}`}
+                className="font-semibold underline"
               >
-                {VEHICLE_TYPES.map((v) => (
-                  <option key={v} value={v}>
-                    {v}
-                  </option>
-                ))}
-              </select>
+                Sign in instead
+              </Link>
+              {role === "rider" &&
+                " — you can apply to ride from your dashboard once you're in."}
             </div>
-          </>
-        )}
+          )}
+          {error && <p className="text-sm text-red-600">{error}</p>}
+          <button disabled={loading} className="lux-button-gold">
+            {loading
+              ? "Creating account…"
+              : role === "rider"
+                ? "Submit application"
+                : "Create account"}
+          </button>
+        </form>
 
-        {alreadyRegistered && (
-          <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-            An account with this email already exists.{" "}
-            <Link
-              href={`/auth/signin?next=${encodeURIComponent(
-                role === "rider"
-                  ? "/dashboard/rider/profile"
-                  : "/dashboard/user",
-              )}`}
-              className="font-semibold underline"
-            >
-              Sign in instead
-            </Link>
-            {role === "rider" &&
-              " — you can apply to ride from your dashboard once you're in."}
-          </div>
-        )}
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <button
-          disabled={loading}
-          className="lux-button-gold"
-        >
-          {loading
-            ? "Creating account…"
-            : role === "rider"
-              ? "Submit application"
-              : "Create account"}
-        </button>
-      </form>
-
-      <p className="mt-6 text-center text-sm text-gray-500">
-        Already have an account?{" "}
-        <Link href="/auth/signin" className="font-semibold text-[#b2843a]">
-          Sign in
-        </Link>
-      </p>
+        <p className="mt-6 text-center text-sm text-gray-500">
+          Already have an account?{" "}
+          <Link href="/auth/signin" className="font-semibold text-[#b2843a]">
+            Sign in
+          </Link>
+        </p>
       </div>
     </div>
   );

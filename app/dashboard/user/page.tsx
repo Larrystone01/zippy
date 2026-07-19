@@ -74,12 +74,16 @@ export default function UserDashboard() {
       if (!user) return;
       setEmail(user.email ?? "");
 
+      console.log("Authenticated user:", user.email);
+      console.log(user.email);
+
       const { data: profileData } = await supabase
         .from("profiles")
         .select("full_name, phone, avatar_url")
         .eq("id", user.id)
         .single();
       setProfile(profileData);
+      console.log(profileData);
 
       const { data: guestOrders } = await supabase
         .from("orders")
@@ -87,14 +91,18 @@ export default function UserDashboard() {
         .eq("customer_email", user.email)
         .is("customer_id", null);
 
+      console.log("Guest orders:", guestOrders);
       if (guestOrders?.length) {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from("orders")
           .update({
             customer_id: user.id,
           })
           .eq("customer_email", user.email)
           .is("customer_id", null);
+
+        console.log("Updated rows:", data);
+        console.log("Update error:", error);
 
         if (error) {
           console.error("Failed to claim guest orders:", error);

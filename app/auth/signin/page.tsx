@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth, User } from "@/app/context/AuthContext";
+import { claimGuestOrders } from "@/lib/order/claimGuestOrders";
 
 export default function SignInPage() {
   return (
@@ -72,6 +73,9 @@ function SignInForm() {
   const signInWithEmail = async (e: React.FormEvent) => {
     e.preventDefault();
     const loggedInUser = await login(email, password);
+    await fetch("/api/orders/claim", {
+      method: "POST",
+    });
     router.push(resolveDestination(loggedInUser.role));
     router.refresh();
   };
